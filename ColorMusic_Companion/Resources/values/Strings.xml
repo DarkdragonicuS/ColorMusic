@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Hello">Hello World, Click Me!</string>
+    <string name="ApplicationName">ColorMusic_Companion</string>
+  <string-array name="ConfigCodes" id="1234567">
+    <item>0x00</item>
+    <item>0x55</item>
+    <item>0x95</item>
+    <item>0x16</item>
+    <item>0x1A</item>
+  </string-array>
+</resources>
