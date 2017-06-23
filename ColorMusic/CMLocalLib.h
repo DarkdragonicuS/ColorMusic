@@ -19,7 +19,7 @@ void DebugMsg(String message);
 
 //WS2812B
 #define neoPin 6
-#define ledCnt 30
+//#define ledCnt 30
 #define ledBrightness 255
 
 const int cParamCnt = 5;
@@ -37,6 +37,7 @@ const long cColorViolet	 = 0xEE82EE;		//213h116s238v
 //extern long preParams[cParamCnt];	//Конфигурация параметров
 extern unsigned int realParams;
 extern bool configNeeded;
+extern int ledCnt;
 //extern bool flagParamsInited;
 //extern bool G_shellAvailable;
 extern CRGB *leds;
