@@ -115,9 +115,9 @@ int* GetFreqVals(int *FreqVals)
 	        digitalWrite(msg7Strobe, LOW);
 	        delayMicroseconds(35);           // ждем установления значения 35 мкс
 	        int spectrumRead = analogRead(msg7DCout);      // считываем значение с аналогового входа
-			Serial.print("Channel: ");
-			Serial.println(i + 1);
-			Serial.println(spectrumRead);
+			//Serial.print("Channel: ");
+			//Serial.println(i + 1);
+			//Serial.println(spectrumRead);
 	        int PWMvalue = map(spectrumRead, 0, 1024, 0, 255);  // преобразовываем диапазон 0-1024 к диапазону 0-255 для ШИМ
 	        if (PWMvalue < 50)       // небольшой программный фильтр шума
 	            PWMvalue = PWMvalue / 2;
@@ -133,7 +133,7 @@ int* GetFreqVals(int *FreqVals)
 	        //analogWrite(LEDpins[x], PWMvalue);
 	        digitalWrite(msg7Strobe, HIGH);
 	    }
-		Serial.println("****");
+		//Serial.println("****");
 	return *FreqVals;
 }
 

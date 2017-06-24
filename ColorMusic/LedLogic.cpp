@@ -471,36 +471,36 @@ void LedPlayAMLTH()
 	
 	if (FreqValsMax > 0)
 	{
-		Serial.println(FreqValsMax);
+		//Serial.println(FreqValsMax);
 		FreqValsMax = (float)FreqValsMax / 255 * ledCnt;
 		//Serial.println(FreqValsMax);
 		//Serial.println("****");
 	}
-	Serial.print("VAL: ");
-	Serial.println(FreqValsMax);
-	Serial.println("GREEN:");
+	//Serial.print("VAL: ");
+	//Serial.println(FreqValsMax);
+	//Serial.println("GREEN:");
 	for (char led = 0; led < gGroupCnt; led++)
 	{
 		ledColors[led][0] = 85 - Cg * led;
 		ledColors[led][1] = 255;
 		ledColors[led][2] = 255;
-		Serial.println(ledColors[led][0]);
+		//Serial.println(ledColors[led][0]);
 	}
-	Serial.println("YELLOW:");
+	//Serial.println("YELLOW:");
 	for (char led = gGroupCnt; led < gGroupCnt+yGroupCnt; led++)
 	{
 		ledColors[led][0] = 50 - Cy * (led- gGroupCnt);
 		ledColors[led][1] = 255;
 		ledColors[led][2] = 255;
-		Serial.println(ledColors[led][0]);
+		//Serial.println(ledColors[led][0]);
 	}
-	Serial.println("RED:");
+	//Serial.println("RED:");
 	for (char led = gGroupCnt+yGroupCnt; led < ledCnt; led++)
 	{
 		ledColors[led][0] = 28 - Cr * (led-(gGroupCnt + yGroupCnt)+1);
 		ledColors[led][1] = 255;
 		ledColors[led][2] = 255;
-		Serial.println(ledColors[led][0]);
+		//Serial.println(ledColors[led][0]);
 	}
 
 	for (char led = 0; led < ledCnt; led++)
@@ -575,7 +575,7 @@ void LedPlayAMFC()
 		Serial.println(ledCnt2 - 1 - led);
 		//Serial.println(ledColors[led][0]);
 	}
-	Serial.println("YELLOW:");
+	//Serial.println("YELLOW:");
 	for (char led = gGroupCnt; led < gGroupCnt + yGroupCnt; led++)
 	{
 		ledColors[ledCnt2 + ledShift + led][0] = 50 - Cy * (led - gGroupCnt);
@@ -584,11 +584,11 @@ void LedPlayAMFC()
 		ledColors[ledCnt2 - 1 - led][0] = 50 - Cy * (led - gGroupCnt);
 		ledColors[ledCnt2 - 1 - led][1] = 255;
 		ledColors[ledCnt2 - 1 - led][2] = 255;
-		Serial.print(ledCnt2 + ledShift + led);
-		Serial.println(ledCnt2 - 1 - led);
+		//Serial.print(ledCnt2 + ledShift + led);
+		//Serial.println(ledCnt2 - 1 - led);
 		//Serial.println(ledColors[led][0]);
 	}
-	Serial.println("RED:");
+	//Serial.println("RED:");
 	for (char led = gGroupCnt + yGroupCnt; led < ledCnt2; led++)
 	{
 		ledColors[ledCnt2 + ledShift + led][0] = 28 - Cr * (led - (gGroupCnt + yGroupCnt) + 1);
@@ -597,8 +597,8 @@ void LedPlayAMFC()
 		ledColors[ledCnt2 - 1 - led][0] = 28 - Cr * (led - (gGroupCnt + yGroupCnt) + 1);
 		ledColors[ledCnt2 - 1 - led][1] = 255;
 		ledColors[ledCnt2 - 1 - led][2] = 255;
-		Serial.print(ledCnt2 + ledShift + led);
-		Serial.println(ledCnt2 - 1 - led);
+		//Serial.print(ledCnt2 + ledShift + led);
+		//Serial.println(ledCnt2 - 1 - led);
 		//Serial.println(ledColors[led][0]);
 	}
 
@@ -682,7 +682,7 @@ void LedPlayFMRandColor()
 				colorsSet = true;
 				//if (abs(chsvColors[pos].h - chsvColors[pos - 1].h) < 20)
 				{//Serial.println(ledColors[0][0]); 
-				Serial.println(chsvColors[pos].h);
+				//Serial.println(chsvColors[pos].h);
 					//	//Serial.print("POS: ");
 					//	//Serial.println(pos, DEC);
 					//	Serial.println(chsvColors[pos].h);

@@ -9,7 +9,7 @@
 
 
 bool G_shellAvailable = true;
-
+uint8_t UserButtonLastState = LOW;
 bool flagModeL1SelectPrinted = false;
 bool flagModeL2SelectPrinted = false;
 bool flagModeL3SelectPrinted = false;
@@ -526,4 +526,44 @@ void FastConfig(String strIn)
 	par = strIn.substring(strIn.indexOf(" ")+1).toInt();
 	MCConfigure(par);
 	
+}
+
+void CheckUPState()
+{
+	//Serial.println(UserButtonLastState);
+	if (digitalRead(ConfigRotationButton) == HIGH)
+	{
+		UserButtonLastState = HIGH;
+	}
+	else
+	{
+		if (UserButtonLastState == HIGH)
+		{
+			UserButtonLastState = LOW;
+			RotateConfig();
+		}
+	}
+}
+
+//Переключение режима по нажатию кнопки
+void RotateConfig()
+{
+	switch (realParams)
+	{
+	case 0x00:
+		MCConfigure(0x55);
+		break;
+	case 0x16:
+		MCConfigure(0x1A);
+		break;
+	case 0x1A:
+		MCConfigure(0x00);
+		break;
+	case 0x55:
+		MCConfigure(0x95);
+		break;
+	case 0x95:
+		MCConfigure(0x16);
+		break;
+	}
 }

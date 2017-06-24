@@ -12,6 +12,9 @@
 //DEBUG:
 void DebugMsg(String message);
 
+//ColorMusic:
+#define ConfigRotationButton 2
+
 //MSGEQ7:
 #define msg7RESET 11
 #define msg7Strobe 12

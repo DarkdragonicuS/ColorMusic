@@ -40,6 +40,7 @@ void setup() {
 	//analogReference(DEFAULT);
 	pinMode(neoPin, OUTPUT);		//WS2812B DIN
 	pinMode(msg7DCout, INPUT);	//MSGEQ7 OUT
+	pinMode(2, INPUT);
 	for (char led = 0; led < ledCnt; led++)		//При включении выключаем свет (обнуляем память WS2812B)
 	{
 		leds[led].setColorCode(0x000000);
@@ -77,6 +78,10 @@ void loop() {
 	{
 		LedPlay(leds);
 	}
+	CheckUPState();
+	//Serial.println(realParams, HEX);
+	//Serial.print("UPSTATE: ");
+	//Serial.println(digitalRead(2));
 
 	if (configNeeded)
 	{

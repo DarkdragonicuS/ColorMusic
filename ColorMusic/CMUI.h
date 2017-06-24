@@ -10,6 +10,7 @@
 #include <Arduino.h>
 
 extern bool G_shellAvailable;
+
 //bool flagParamsInited = false;
 extern unsigned int preParam;
 extern unsigned int curParams;
@@ -29,5 +30,7 @@ unsigned int Configure();
 unsigned int MCConfigure(unsigned int Params);
 void FastConfig(String strIn);
 //String ConfigUncode(unsigned int configCode);
+void CheckUPState();
+void RotateConfig();
 
 #endif /* CMUI_H_ */
