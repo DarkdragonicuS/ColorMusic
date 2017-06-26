@@ -20,17 +20,24 @@ extern bool flagModeL3SelectPrinted;
 extern bool flagModeL4SelectPrinted;
 extern bool flagModeL5SelectPrinted;
 
-void Welcome();
-int GetCommandHandler(String command);	//Список команд
-void CommandShell();	//Запуск коммандного интерпретатора
-void CommandHelp();		//Команда help
-void CommandStatus(long params[], char paramCnt);	//Команда status
-unsigned int MCConfigure();		//Интерактивный конфигуратор
-unsigned int Configure();
-unsigned int MCConfigure(unsigned int Params);
-void FastConfig(String strIn);
-//String ConfigUncode(unsigned int configCode);
-void CheckUPState();
-void RotateConfig();
+class CMUI
+{
+public:
+	static void Welcome();
+	static void CommandShell();	//Запуск коммандного интерпретатора
+	//String ConfigUncode(unsigned int configCode);
+	static void CheckUPState();
+private:
+	static int GetCommandHandler(String command);	//Список команд
+	static void CommandHelp();		//Команда help
+	static void CommandStatus(long params[], char paramCnt);	//Команда status
+	static unsigned int MCConfigure();		//Интерактивный конфигуратор
+	static unsigned int Configure();
+	static unsigned int MCConfigure(unsigned int Params);
+	static void FastConfig(String strIn);
+	static void RotateConfig();
+};
+
+
 
 #endif /* CMUI_H_ */

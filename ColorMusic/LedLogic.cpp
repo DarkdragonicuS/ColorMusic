@@ -10,14 +10,14 @@ bool colorsSet = false;
 char G_LEDCOLORS[7][3];
 
 //Запуск светомузыки
-void LedPlay(CRGB leds[ledCnt])
+void LedLogic::LedPlay(CRGB leds[ledCnt])
 {
 	//DebugMsg("LedPlay");
 	//Implementation
 	switch (realParams)
 	{
 	case 0x00:
-		LedOff();
+		LedOut::LedOff();
 		break;
 	case 0x25:
 		//DebugMsg("OK?");
@@ -52,7 +52,7 @@ void LedPlay(CRGB leds[ledCnt])
 	}
 }
 
-void LedPlayFreqMode(CRGB leds[ledCnt])
+void LedLogic::LedPlayFreqMode(CRGB leds[ledCnt])
 {
 	//Implementation
 	/*switch(realParams[1])
@@ -66,13 +66,13 @@ void LedPlayFreqMode(CRGB leds[ledCnt])
 	}*/
 }
 
-void LedPlayAmpMode(CRGB leds[ledCnt])
+void LedLogic::LedPlayAmpMode(CRGB leds[ledCnt])
 {
 	//Implementation
 	//TODO
 }
 
-void LedPlayFMRange(CRGB leds[ledCnt])
+void LedLogic::LedPlayFMRange(CRGB leds[ledCnt])
 {
 	//Implementation
 	/*switch(realParams[2])
@@ -102,12 +102,12 @@ void LedPlayFMRange(CRGB leds[ledCnt])
 	}*/
 }
 
-void LedPlayFMRotation(CRGB leds[ledCnt])
+void LedLogic::LedPlayFMRotation(CRGB leds[ledCnt])
 {
 	//TODO: Implementation
 }
 
-void LedPlayMFRGRB(int FreqVals[7], bool inv, CRGB leds[ledCnt])  //Mode 1-1-1-1/2
+void LedLogic::LedPlayMFRGRB(int FreqVals[7], bool inv, CRGB leds[ledCnt])  //Mode 1-1-1-1/2
 {
 	/*
 	 Прямое расположение цветов:
@@ -162,7 +162,7 @@ void LedPlayMFRGRB(int FreqVals[7], bool inv, CRGB leds[ledCnt])  //Mode 1-1-1-1
 	LedPlayRangeFin(Rainbow, FreqVals, leds);
 }
 
-void LedPlayRangeFin(long rainbow[7], int FreqVals[7], CRGB leds[ledCnt])
+void LedLogic::LedPlayRangeFin(long rainbow[7], int FreqVals[7], CRGB leds[ledCnt])
 {
 	/*//TODO:
 	//Implementation
@@ -213,14 +213,14 @@ void LedPlayRangeFin(long rainbow[7], int FreqVals[7], CRGB leds[ledCnt])
 }
 
 //TODO:
-char LedPlayFMRange(char mode)
+char LedLogic::LedPlayFMRange(char mode)
 {
 	void LedPlayFMRandColor();
 	return 0;
 }
 
 //TODO:
-char LedPlayFMRange(char mode, unsigned int opt)
+char LedLogic::LedPlayFMRange(char mode, unsigned int opt)
 {
 	switch(mode)
 	{
@@ -251,7 +251,7 @@ char LedPlayFMRange(char mode, unsigned int opt)
 	return 0;
 }
 
-void LedPlayFMRB(bool inv)
+void LedLogic::LedPlayFMRB(bool inv)
 {
 	int ledColors[ledCnt][3];		//цвета светодиодов по модели HSV
 	for(int i = 0; i<ledCnt; i++)
@@ -374,10 +374,10 @@ void LedPlayFMRB(bool inv)
 		Serial.println(v);
 	}
 	Serial.println("****");*/
-	LedMusic(ledColors);
+	LedOut::LedMusic(ledColors);
 }
 
-void LedMusic(int hsvColors[ledCnt][3])
+void LedOut::LedMusic(int hsvColors[ledCnt][3])
 {
 	for(int led = 0; led < ledCnt; led++)
 	{
@@ -402,7 +402,7 @@ void LedMusic(int hsvColors[ledCnt][3])
 	FastLED.show();
 }
 
-void LedPlayFMRgDyn()
+void LedLogic::LedPlayFMRgDyn()
 {
 	int *ledColors[ledCnt][3];		//цвета светодиодов по модели HSV
 	int *FreqVals = GetFreqVals(FreqVals);
@@ -428,26 +428,16 @@ void LedPlayFMRgDyn()
 	//LedMusic(ledColors, ledCnt);
 }
 
-void LedOff()
+void LedOut::LedOff()
 {
-	
-	int ledColors[ledCnt][3];
 	for (char led = 0; led < ledCnt; led++)
 	{
-		ledColors[led][0] = 0;
-		ledColors[led][1] = 0;
-		ledColors[led][2] = 0;
+		leds[led].setColorCode(0x00);
 	}
-	LedMusic(ledColors);
-/*
-	for (char led = 0; led < ledCnt; led++)
-	{
-		leds[led].setColorCode(0);
-	}
-	FastLED.show();*/
+	FastLED.show();
 }
 
-void LedPlayAMLTH()
+void LedLogic::LedPlayAMLTH()
 {
 	int ledColors[ledCnt][3];
 	char *rGroup, *yGroup, *gGroup;
@@ -467,7 +457,7 @@ void LedPlayAMLTH()
 			FreqValsMax = FreqVals[val];
 		}
 	}
-	Serial.println(FreqValsMax);
+	//Serial.println(FreqValsMax);
 	
 	if (FreqValsMax > 0)
 	{
@@ -511,10 +501,10 @@ void LedPlayAMLTH()
 		}
 	}
 	//Serial.println(FreqValsMax);
-	LedMusic(ledColors);
+	LedOut::LedMusic(ledColors);
 }
 
-void LedPlayAMFC()
+void  LedLogic::LedPlayAMFC()
 {
 	DebugMsg("0x1A");
 	int ledColors[ledCnt][3];
@@ -619,10 +609,10 @@ void LedPlayAMFC()
 		}
 	}
 	////Serial.println(FreqValsMax);
-	LedMusic(ledColors);
+	LedOut::LedMusic(ledColors);
 }
 
-void LedPlayFMRandColor()
+void LedLogic::LedPlayFMRandColor()
 {
 	DebugMsg("Random:");
 	//int ledColors[ledCnt][3];		//цвета светодиодов по модели HSV

@@ -19,7 +19,7 @@ bool flagModeL5SelectPrinted = false;
 unsigned int preParam = 0;
 
 //Приветственное сообщение при загрузке ColorMusic
-void Welcome()
+void CMUI::Welcome()
 {
 	Serial.println("Welcome to ColorMusic! Powered by Arduino");
 	Serial.println("We do respect your personality.");
@@ -27,7 +27,7 @@ void Welcome()
 }
 
 //Хэндлер команд CommandShell
-int GetCommandHandler(String command)
+int CMUI::GetCommandHandler(String command)
 {
 	if(command=="help") return 1;
 	if(command=="status") return 2;
@@ -37,7 +37,7 @@ int GetCommandHandler(String command)
 }
 
 //Командный интерпретатор
-void CommandShell()
+void CMUI::CommandShell()
 {
 	Serial.setTimeout(50);
 	if(Serial.available())
@@ -70,7 +70,7 @@ void CommandShell()
 }
 
 //Команда "help"
-void CommandHelp()
+void CMUI::CommandHelp()
 {
 	Serial.println("List of available commands:");
 						Serial.println("help - shows this text");
@@ -82,7 +82,7 @@ void CommandHelp()
 }
 
 //Текущие параметры (команда "status")
-void CommandStatus(long params[], char paramCnt)
+void CMUI::CommandStatus(long params[], char paramCnt)
 {
 	Serial.print("Your current configuration: ");
 						for(int param=0; param<paramCnt; param++)
@@ -92,7 +92,7 @@ void CommandStatus(long params[], char paramCnt)
 						Serial.println();
 }
 
-unsigned int MCConfigure(unsigned int Params)
+unsigned int CMUI::MCConfigure(unsigned int Params)
 {
 	/*for(int param=0; param<paramCnt; param++)
 	{
@@ -103,7 +103,7 @@ unsigned int MCConfigure(unsigned int Params)
 }
 
 //Интерактивный конфигуратор
-unsigned int MCConfigure()
+unsigned int CMUI::MCConfigure()
 /*
  * 00000000 00000000 00000000 00 00 00 00
    (   R  ) (  G   ) (   B  )  4  3  2  1
@@ -497,7 +497,7 @@ None         =   0x0(0)
 	return "Incorrect Configuration";
 }*/
 
-unsigned int Configure()
+unsigned int CMUI::Configure()
 {
 	//Serial.println("Enter configuration code:");
 	bool sa = false;
@@ -520,7 +520,7 @@ unsigned int Configure()
 	return serInputInt;
 }
 
-void FastConfig(String strIn)
+void CMUI::FastConfig(String strIn)
 {
 	unsigned int par;
 	par = strIn.substring(strIn.indexOf(" ")+1).toInt();
@@ -528,7 +528,7 @@ void FastConfig(String strIn)
 	
 }
 
-void CheckUPState()
+void CMUI::CheckUPState()
 {
 	//Serial.println(UserButtonLastState);
 	if (digitalRead(ConfigRotationButton) == HIGH)
@@ -546,7 +546,7 @@ void CheckUPState()
 }
 
 //Переключение режима по нажатию кнопки
-void RotateConfig()
+void CMUI::RotateConfig()
 {
 	switch (realParams)
 	{

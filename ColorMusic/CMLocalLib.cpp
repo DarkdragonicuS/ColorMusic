@@ -118,12 +118,14 @@ int* GetFreqVals(int *FreqVals)
 			//Serial.print("Channel: ");
 			//Serial.println(i + 1);
 			//Serial.println(spectrumRead);
-	        int PWMvalue = map(spectrumRead, 0, 1024, 0, 255);  // преобразовываем диапазон 0-1024 к диапазону 0-255 для ШИМ
-	        if (PWMvalue < 50)       // небольшой программный фильтр шума
-	            PWMvalue = PWMvalue / 2;
+	        int PWMvalue = map(spectrumRead, 0, 1023, 0, 255);  // преобразовываем диапазон 0-1024 к диапазону 0-255 для ШИМ
+			//Serial.println(PWMvalue);
+	        if (PWMvalue < 5)       // небольшой программный фильтр шума
+	            //PWMvalue = PWMvalue / 2;
+				PWMvalue = 0;
 
 	        //Serial.println(PWMvalue);
-	        FreqVals[i] = PWMvalue*2;
+	        FreqVals[i] = PWMvalue*3;
 			//Serial.println(FreqVals[i]);
 			/*if (FreqVals[i] > 150)
 			{

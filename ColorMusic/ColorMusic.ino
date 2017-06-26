@@ -10,6 +10,7 @@
 #include "CMUI.h"
 #include "LedLogic.h"
 #include <MSGEQ7.h>
+#include "LedOutput.h"
 
 #define pinAnalogLeft A0
 #define pinAnalogRight A0
@@ -36,8 +37,8 @@ void setup() {
 	FastLED.setTemperature(Tungsten100W);
 	FastLED.setBrightness(ledBrightness);
 	Serial.setTimeout(50);
-	analogReference(INTERNAL);
-	//analogReference(DEFAULT);
+	//analogReference(INTERNAL);
+	analogReference(DEFAULT);
 	pinMode(neoPin, OUTPUT);		//WS2812B DIN
 	pinMode(msg7DCout, INPUT);	//MSGEQ7 OUT
 	pinMode(2, INPUT);
@@ -52,7 +53,7 @@ void setup() {
 	FastLED.show();
 	MSGEQ7.begin();
 	//DebugMsg("");
-	Welcome();	//Приветственное сообщение
+	CMUI::Welcome();	//Приветственное сообщение
 }
 
 void loop() {
@@ -76,9 +77,9 @@ void loop() {
 	//if (realParams)
 
 	{
-		LedPlay(leds);
+		LedLogic::LedPlay(leds);
 	}
-	CheckUPState();
+	CMUI::CheckUPState();
 	//Serial.println(realParams, HEX);
 	//Serial.print("UPSTATE: ");
 	//Serial.println(digitalRead(2));
@@ -101,11 +102,14 @@ void loop() {
 		}
 		if (G_shellAvailable)
 		{
-			CommandShell();
+			CMUI::CommandShell();
 		}
 	}
 
- 
+	//LedOutput::LedFade(30, 2);
+
+	
+
 	
 }
 	
