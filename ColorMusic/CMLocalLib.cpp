@@ -104,7 +104,7 @@ void LedPlayFMRotation(CRGB leds[ledCnt])
 }*/
 
 //Получение значений амплитуд частот с MSGEQ7
-int* GetFreqVals(int *FreqVals)
+int* SpectrumAnalizer::GetFreqVals(int *FreqVals)
 {
 	int cnt = 0;
 	 digitalWrite(msg7RESET, HIGH);   // осуществляем сброс MSGEQ7

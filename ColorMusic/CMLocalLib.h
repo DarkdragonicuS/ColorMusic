@@ -62,7 +62,6 @@ void LedMusic(int hsvColors[ledCnt][3], CRGB leds[ledCnt]);	//Зажечь светодиоды 
 */
 
 
-int* GetFreqVals(int *FreqVals);	//Получение значений амплитуд частот с MSGEQ7
 void RGB2HSV(long rgb, int* h, int* s, int* v);		//Перевод из модели RGB в HSV
 float Max(float a, float b);
 float Min(float a, float b);
@@ -70,13 +69,10 @@ uint8_t GetHueFromCRGB(CRGB* crgb, int index);
 uint8_t GetSatFromCRGB(CRGB* crgb, int index);
 uint8_t GetValFromCRGB(CRGB* crgb, int index);
 
-//UI
-//void Welcome();
-//void CommandShell();	//Запуск коммандного интерпретатора
-//int GetCommandHandler(String command);	//Список команд
-//void CommandHelp();		//Команда help
-//void CommandStatus();	//Команда status
-//int MCConfigure();		//Интерактивный конфигуратор
-//void MCConfigure(long params[cParamCnt]);
+class SpectrumAnalizer
+{
+public:
+	static int* GetFreqVals(int *FreqVals);	//Получение значений амплитуд частот с MSGEQ7
+};
 
 #endif /* CMLOCALLIB_H_ */

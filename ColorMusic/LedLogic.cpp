@@ -319,7 +319,7 @@ void LedLogic::LedPlayFMRB(bool inv)
 		Rainbow[6][2] = 255;
 	}
 	int FreqVals[7] = {0,0,0,0,0,0,0};
-	*FreqVals = GetFreqVals(FreqVals);
+	*FreqVals = SpectrumAnalizer::GetFreqVals(FreqVals);
 	for(int color=0; color<7; color++)		//определение новых цветов с измененной яркостью
 	{
 		//Serial.println(FreqVals[color]);
@@ -405,7 +405,7 @@ void LedOut::LedMusic(int hsvColors[ledCnt][3])
 void LedLogic::LedPlayFMRgDyn()
 {
 	int *ledColors[ledCnt][3];		//цвета светодиодов по модели HSV
-	int *FreqVals = GetFreqVals(FreqVals);
+	int *FreqVals = SpectrumAnalizer::GetFreqVals(FreqVals);
 	int ledColor[3] = {0, 0, 0};	//TODO:
 									//Определить и установить цвет исходя от пройденного времени использования предыдущего цвета
 	int ledGroupCnt = ledCnt/7; //Определяем, по сколько LED в каждой группе (полосе частот). В самой низкой полосе будет +остаток, т.е. >= всех остальных групп
@@ -448,7 +448,7 @@ void LedLogic::LedPlayAMLTH()
 	char Cy = 21 / yGroupCnt;
 	char Cr = (float)40/360*255 / rGroupCnt;
 	int FreqVals[7] = { 0,0,0,0,0,0,0 };
-	*FreqVals = GetFreqVals(FreqVals);
+	*FreqVals = SpectrumAnalizer::GetFreqVals(FreqVals);
 	int FreqValsMax = 0;
 	for (char val = 0; val < 7; val++)
 	{
@@ -526,7 +526,7 @@ void  LedLogic::LedPlayAMFC()
 	char Cy = 21 / yGroupCnt;
 	char Cr = (float)40 / 360 * 255 / rGroupCnt;
 	int FreqVals[7] = { 0,0,0,0,0,0,0 };
-	*FreqVals = GetFreqVals(FreqVals);
+	*FreqVals = SpectrumAnalizer::GetFreqVals(FreqVals);
 	int FreqValsMax = 0;
 	for (char val = 0; val < 7; val++)
 	{
