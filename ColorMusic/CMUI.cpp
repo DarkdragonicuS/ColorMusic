@@ -8,7 +8,10 @@
 #include "CMLocalLib.h"
 
 
-bool G_shellAvailable = true;
+//bool G_shellAvailable = true;
+
+bool CMUI::shellAvailable = true;
+
 uint8_t UserButtonLastState = LOW;
 bool flagModeL1SelectPrinted = false;
 bool flagModeL2SelectPrinted = false;
@@ -21,9 +24,9 @@ unsigned int preParam = 0;
 //Приветственное сообщение при загрузке ColorMusic
 void CMUI::Welcome()
 {
-	Serial.println("Welcome to ColorMusic! Powered by Arduino");
-	Serial.println("We do respect your personality.");
-	Serial.println(">>:");
+	btSerial.println("Welcome to ColorMusic! Powered by Arduino");
+	btSerial.println("We do respect your personality.");
+	btSerial.println(">>:");
 }
 
 //Хэндлер команд CommandShell
@@ -39,30 +42,33 @@ int CMUI::GetCommandHandler(String command)
 //Командный интерпретатор
 void CMUI::CommandShell()
 {
-	Serial.setTimeout(50);
-	if(Serial.available())
+	if (!shellAvailable)	//если вывод занят другой командой, то шелл не запускается
+	{
+		return;
+	}
+	btSerial.setTimeout(50);
+	if(btSerial.available())
 			{
-				String strIn = Serial.readString();
-				//Serial.println(strIn.substring(0, strIn.indexOf(" ")));
+				String strIn = btSerial.readString();
 				switch(GetCommandHandler(strIn))
 				{
 				case 1:
 					CommandHelp();		//"help"
 					break;
 				case 2:
-					//CommandStatus();	//"status"
+					CommandStatus();	//"status"
 					break;
 				case 3:
 					//preParam = 0;
-					MCConfigure();		//"configui"
+					CMConfigure();		//"configui"
 					break;
 				case 4:
 					FastConfig(strIn);	//"config CONFIGCODE"
 					break;
 				default:				//Unknown command
-					Serial.print("Can't recognise command \"");
-					Serial.print(strIn);
-					Serial.println("\". Please, repeat. Try \"help\" for command list.");
+					btSerial.print("Can't recognise command \"");
+					btSerial.print(strIn);
+					btSerial.println("\". Please, repeat. Try \"help\" for command list.");
 					break;
 				}
 
@@ -72,38 +78,31 @@ void CMUI::CommandShell()
 //Команда "help"
 void CMUI::CommandHelp()
 {
-	Serial.println("List of available commands:");
-						Serial.println("help - shows this text");
-						Serial.println("status - shows current configuration");
-						Serial.println("configui - runs configuring dialoge");
-						Serial.println("config CONFIGCODE - configures with CONFIGCODE parameters");
-						Serial.println();
-						Serial.println("Nixiris' MusicColor project 2017");
+	btSerial.println("List of available commands:");
+						btSerial.println("help - shows this text");
+						btSerial.println("status - shows current configuration");
+						btSerial.println("configui - runs configuring dialoge");
+						btSerial.println("config CONFIGCODE - configures with CONFIGCODE parameters");
+						btSerial.println();
+						btSerial.println("Nixiris' MusicColor project 2017");
 }
 
 //Текущие параметры (команда "status")
-void CMUI::CommandStatus(long params[], char paramCnt)
+void CMUI::CommandStatus()
 {
-	Serial.print("Your current configuration: ");
-						for(int param=0; param<paramCnt; param++)
-						{
-							Serial.print(params[param]);
-						}
-						Serial.println();
+	btSerial.print("Your current configuration: ");
+	btSerial.print(configParams, HEX);
+	btSerial.println();
 }
 
-unsigned int CMUI::MCConfigure(unsigned int Params)
+unsigned int CMUI::CMConfigure(unsigned int Params)
 {
-	/*for(int param=0; param<paramCnt; param++)
-	{
-		destParams[param] = srcParams[param];
-	}*/
-	curParams = Params;
+	configParamsTmp = Params;
 	return Params;
 }
 
 //Интерактивный конфигуратор
-unsigned int CMUI::MCConfigure()
+unsigned int CMUI::CMConfigure()
 /*
  * 00000000 00000000 00000000 00 00 00 00
    (   R  ) (  G   ) (   B  )  4  3  2  1
@@ -164,7 +163,7 @@ None         =   0x0(0)
 	//Serial.println(preParam);
 	unsigned int serInput = 0;
 	unsigned int prep = 0;
-	G_shellAvailable = false;
+	shellAvailable = false;
 	//flagParamsInited = false;
 	switch(preParam)
 	{
@@ -181,7 +180,7 @@ None         =   0x0(0)
 	case 0xAA:
 		if(configNeeded)
 		{
-			G_shellAvailable = true;
+			shellAvailable = true;
 			//Serial.println(preParam);
 			configNeeded = false;
 			return preParam;
@@ -199,16 +198,16 @@ None         =   0x0(0)
 		if(!flagModeL1SelectPrinted)
 		{
 			//DebugMsg("ajsl");
-			Serial.println("Please, choose mode:");
-			Serial.println("1) Frequency Mode");
-			Serial.println("2) Amplitude Mode");
+			btSerial.println("Please, choose mode:");
+			btSerial.println("1) Frequency Mode");
+			btSerial.println("2) Amplitude Mode");
 			flagModeL1SelectPrinted = true;
 		}
 		//DebugMsg("Available?");
-		if(Serial.available())
+		if(btSerial.available())
 		{
 			//DebugMsg("Yes");
-			serInput = Serial.parseInt();
+			serInput = btSerial.parseInt();
 			if((serInput>0)&&(serInput<3))
 			{
 				preParam +=serInput;
@@ -216,7 +215,7 @@ None         =   0x0(0)
 			}
 			else
 			{
-				Serial.println("You entered wrong number.");
+				btSerial.println("You entered wrong number.");
 				flagModeL1SelectPrinted = false;
 			}
 		}
@@ -226,23 +225,23 @@ None         =   0x0(0)
 	{
 		if(!flagModeL2SelectPrinted)
 		{
-			Serial.println("Please, specify:");
+			btSerial.println("Please, specify:");
 			switch(preParam)
 			{
 			case 0x1:
-				Serial.println("1) Range");
-				Serial.println("2) Rotation");
+				btSerial.println("1) Range");
+				btSerial.println("2) Rotation");
 				break;
 			case 0x2:
-				Serial.println("1) Low To High");
-				Serial.println("2) From Center");
+				btSerial.println("1) Low To High");
+				btSerial.println("2) From Center");
 				break;
 			}
 			flagModeL2SelectPrinted = true;
 		}
-		if(Serial.available())
+		if(btSerial.available())
 		{
-			serInput = Serial.parseInt();
+			serInput = btSerial.parseInt();
 			if((serInput>0)&&(serInput<3))
 			{
 				preParam += serInput<<0x2;
@@ -250,7 +249,7 @@ None         =   0x0(0)
 			}
 			else
 			{
-				Serial.println("You entered wrong number.");
+				btSerial.println("You entered wrong number.");
 				flagModeL2SelectPrinted = false;
 			}
 		}
@@ -259,33 +258,33 @@ None         =   0x0(0)
 	{
 		if(!flagModeL3SelectPrinted)
 		{
-			Serial.println("Please, specify:");
+			btSerial.println("Please, specify:");
 			switch(preParam)
 			{
 			case 0x5:
-				Serial.println("1) Rainbow");
-				Serial.println("2) Random Color");
-				Serial.println("3) Single Color");
+				btSerial.println("1) Rainbow");
+				btSerial.println("2) Random Color");
+				btSerial.println("3) Single Color");
 				break;
 			case 0x9:
-				Serial.println("1) Rainbow");
-				Serial.println("2) Random Color");
-				Serial.println("3) Single Color");
+				btSerial.println("1) Rainbow");
+				btSerial.println("2) Random Color");
+				btSerial.println("3) Single Color");
 				break;
 			case 0x6:
-				Serial.println("1) RGB");
-				Serial.println("2) Single Color");
+				btSerial.println("1) RGB");
+				btSerial.println("2) Single Color");
 				break;
 			case 0xA:
-				Serial.println("1) RGB");
-				Serial.println("2) Single Color");
+				btSerial.println("1) RGB");
+				btSerial.println("2) Single Color");
 				break;
 			}
 			flagModeL3SelectPrinted = true;
 		}
-		if(Serial.available())
+		if(btSerial.available())
 		{
-			serInput = Serial.parseInt();
+			serInput = btSerial.parseInt();
 			if((serInput>0)&&(serInput<4))
 			{
 				preParam += serInput<<0x4;
@@ -293,7 +292,7 @@ None         =   0x0(0)
 			}
 			else
 			{
-				Serial.println("You entered wrong number.");
+				btSerial.println("You entered wrong number.");
 				flagModeL3SelectPrinted = false;
 			}
 		}
@@ -302,39 +301,39 @@ None         =   0x0(0)
 	{
 		if(!flagModeL4SelectPrinted)
 		{
-			Serial.println("Please, specify:");
+			btSerial.println("Please, specify:");
 			switch(preParam)
 			{
 			case 0x15:
-				Serial.println("1) Straight");
-				Serial.println("2) Reverse");
+				btSerial.println("1) Straight");
+				btSerial.println("2) Reverse");
 				break;
 			case 0x35:
-				Serial.println("1) Pick Color");
-				Serial.println("2) Dynamic Color");
+				btSerial.println("1) Pick Color");
+				btSerial.println("2) Dynamic Color");
 				break;
 			case 0x19:
-				Serial.println("1) Straight");
-				Serial.println("2) Reverse");
+				btSerial.println("1) Straight");
+				btSerial.println("2) Reverse");
 				break;
 			case 0x39:
-				Serial.println("1) Pick Color");
-				Serial.println("2) Dynamic Color");
+				btSerial.println("1) Pick Color");
+				btSerial.println("2) Dynamic Color");
 				break;
 			case 0x26:
-				Serial.println("1) Pick Color");
-				Serial.println("2) Dynamic Color");
+				btSerial.println("1) Pick Color");
+				btSerial.println("2) Dynamic Color");
 				break;
 			case 0x2A:
-				Serial.println("1) Pick Color");
-				Serial.println("2) Dynamic Color");
+				btSerial.println("1) Pick Color");
+				btSerial.println("2) Dynamic Color");
 				break;
 			}
 			flagModeL4SelectPrinted = true;
 		}
-		if(Serial.available())
+		if(btSerial.available())
 		{
-			serInput = Serial.parseInt();
+			serInput = btSerial.parseInt();
 			if((serInput>0)&&(serInput<3))
 			{
 				preParam += serInput<<0x6;
@@ -342,7 +341,7 @@ None         =   0x0(0)
 			}
 			else
 			{
-				Serial.println("You entered wrong number.");
+				btSerial.println("You entered wrong number.");
 				flagModeL4SelectPrinted = false;
 			}
 
@@ -352,12 +351,12 @@ None         =   0x0(0)
 	{
 		if(!flagModeL5SelectPrinted)
 		{
-			Serial.println("Please, specify color (RGB 0x000001-0xFFFFFF");
+			 btSerial.println("Please, specify color (RGB 0x000001-0xFFFFFF");
 			flagModeL5SelectPrinted = true;
 		}
-		if(Serial.available())
+		if(btSerial.available())
 		{
-			serInput = Serial.parseInt();
+			serInput = btSerial.parseInt();
 			if((serInput>0)&&(serInput<0x1000000))
 			{
 				preParam += serInput<<0x8;
@@ -365,7 +364,7 @@ None         =   0x0(0)
 			}
 			else
 			{
-				Serial.println("You entered wrong number.");
+				btSerial.println("You entered wrong number.");
 				flagModeL5SelectPrinted = false;
 			}
 
@@ -497,49 +496,64 @@ None         =   0x0(0)
 	return "Incorrect Configuration";
 }*/
 
-unsigned int CMUI::Configure()
-{
-	//Serial.println("Enter configuration code:");
-	bool sa = false;
-	String serInput;
-	int serInputInt = 0;
-	if (Serial.available())
-	{
-		sa = true;
-		configNeeded = false;
-
-		while (Serial.available())
-		{
-			Serial.setTimeout(50);
-			//serInput += String(Serial.read());
-			serInputInt += Serial.parseInt();
-			//return 0x55;
-		}
-
-	}
-	return serInputInt;
-}
+//unsigned int CMUI::Configure()
+//{
+//	//Serial.println("Enter configuration code:");
+//	bool sa = false;
+//	String serInput;
+//	int serInputInt = 0;
+//	if (btSerial.available())
+//	{
+//		sa = true;
+//		configNeeded = false;
+//
+//		while (btSerial.available())
+//		{
+//			btSerial.setTimeout(50);
+//			//serInput += String(Serial.read());
+//			serInputInt += btSerial.parseInt();
+//			//return 0x55;
+//		}
+//
+//	}
+//	return serInputInt;
+//}
 
 void CMUI::FastConfig(String strIn)
 {
 	unsigned int par;
 	par = strIn.substring(strIn.indexOf(" ")+1).toInt();
-	MCConfigure(par);
+	CMConfigure(par);
 	
 }
 
-void CMUI::CheckUPState()
+//void CMUI::ActivateModeButton()
+//{
+//	if (digitalRead(ModeButton) == HIGH)
+//	{
+//		UserButtonLastState = HIGH;
+//	}
+//	else
+//	{
+//		if (UserButtonLastState == HIGH)
+//		{
+//			UserButtonLastState = LOW;
+//			RotateConfig();
+//		}
+//	}
+//}
+
+void CMUI::ModeButton()
 {
-	//Serial.println(UserButtonLastState);
-	if (digitalRead(ConfigRotationButton) == HIGH)
+	if (digitalRead(ModeButton) == LOW)
 	{
-		UserButtonLastState = HIGH;
+		UserButtonLastState = LOW;
 	}
 	else
 	{
-		if (UserButtonLastState == HIGH)
+		if (UserButtonLastState == LOW)
 		{
-			UserButtonLastState = LOW;
+			UserButtonLastState = HIGH;
 			RotateConfig();
 		}
 	}
@@ -548,22 +562,22 @@ void CMUI::CheckUPState()
 //Переключение режима по нажатию кнопки
 void CMUI::RotateConfig()
 {
-	switch (realParams)
+	switch (configParams)
 	{
 	case 0x00:
-		MCConfigure(0x55);
+		CMConfigure(0x55);
 		break;
 	case 0x16:
-		MCConfigure(0x1A);
+		CMConfigure(0x1A);
 		break;
 	case 0x1A:
-		MCConfigure(0x00);
+		CMConfigure(0x00);
 		break;
 	case 0x55:
-		MCConfigure(0x95);
+		CMConfigure(0x95);
 		break;
 	case 0x95:
-		MCConfigure(0x16);
+		CMConfigure(0x16);
 		break;
 	}
 }

@@ -8,22 +8,28 @@
 #ifndef CMLOCALLIB_H_
 #define CMLOCALLIB_H_
 #include <FastLED.h>
+#include <SoftwareSerial.h>
 
 //DEBUG:
 void DebugMsg(String message);
 
 //ColorMusic:
-#define ConfigRotationButton 2
+#define ModeButton 2
 
 //MSGEQ7:
 #define msg7RESET 11
 #define msg7Strobe 12
 #define msg7DCout A0
+extern float msg7OutMultiplier;	//коэффициент усиления вывода MSGEQ7
 
 //WS2812B
 #define neoPin 6
 #define ledCnt 30
 #define ledBrightness 255
+
+//HC-06
+#define btRX 8
+#define btTX 9
 
 const int cParamCnt = 5;
 
@@ -38,11 +44,12 @@ const long cColorBlue	 = 0x0000FF;		//170h255s255v
 const long cColorViolet	 = 0xEE82EE;		//213h116s238v
 
 //extern long preParams[cParamCnt];	//Конфигурация параметров
-extern unsigned int realParams;
+extern unsigned int configParams;
 extern bool configNeeded;
 //extern bool flagParamsInited;
 //extern bool G_shellAvailable;
-extern CRGB *leds;
+extern CRGB *ledStrip;
+extern SoftwareSerial btSerial;
 
 void ShowParams();	//Вывод конфигурации на сериал
 //void ParamsJustInited();
@@ -72,7 +79,16 @@ uint8_t GetValFromCRGB(CRGB* crgb, int index);
 class SpectrumAnalizer
 {
 public:
-	static int* GetFreqVals(int *FreqVals);	//Получение значений амплитуд частот с MSGEQ7
+	static int* GetFreqVals(int *FreqVals);	//Получение значений амплитуд частотных полос с MSGEQ7
 };
+
+//class ColorMusic
+//{
+//public:
+//
+//
+//	static unsigned int configParamsTmp;
+//	static unsigned int configParams;
+//};
 
 #endif /* CMLOCALLIB_H_ */

@@ -9,11 +9,11 @@
 #define CMUI_H_
 #include <Arduino.h>
 
-extern bool G_shellAvailable;
+//extern bool G_shellAvailable;
 
 //bool flagParamsInited = false;
 extern unsigned int preParam;
-extern unsigned int curParams;
+extern unsigned int configParamsTmp;
 extern bool flagModeL1SelectPrinted;
 extern bool flagModeL2SelectPrinted;
 extern bool flagModeL3SelectPrinted;
@@ -25,17 +25,18 @@ class CMUI
 public:
 	static void Welcome();
 	static void CommandShell();	//Запуск коммандного интерпретатора
-	//String ConfigUncode(unsigned int configCode);
-	static void CheckUPState();
+	static void ModeButton();
 private:
 	static int GetCommandHandler(String command);	//Список команд
 	static void CommandHelp();		//Команда help
-	static void CommandStatus(long params[], char paramCnt);	//Команда status
-	static unsigned int MCConfigure();		//Интерактивный конфигуратор
-	static unsigned int Configure();
-	static unsigned int MCConfigure(unsigned int Params);
-	static void FastConfig(String strIn);
-	static void RotateConfig();
+	static void CommandStatus();	//Команда status
+	static unsigned int CMConfigure();		//Интерактивный конфигуратор
+	//static unsigned int Configure();
+	static unsigned int CMConfigure(unsigned int Params);	//установка указанной конфигурации
+	static void FastConfig(String strIn);	//команда config CONFIGCODE
+	static void RotateConfig();	//переключение режима
+
+	static bool shellAvailable;	//флаг блокировки вывода
 };
 
 

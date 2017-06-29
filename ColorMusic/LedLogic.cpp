@@ -14,10 +14,10 @@ void LedLogic::LedPlay(CRGB leds[ledCnt])
 {
 	//DebugMsg("LedPlay");
 	//Implementation
-	switch (realParams)
+	switch (configParams)
 	{
 	case 0x00:
-		LedOut::LedOff();
+		CMExecutor::LedOff();
 		break;
 	case 0x25:
 		//DebugMsg("OK?");
@@ -374,30 +374,15 @@ void LedLogic::LedPlayFMRB(bool inv)
 		Serial.println(v);
 	}
 	Serial.println("****");*/
-	LedOut::LedMusic(ledColors);
+	CMExecutor::LedMusic(ledColors);
 }
 
-void LedOut::LedMusic(int hsvColors[ledCnt][3])
+void CMExecutor::LedMusic(int hsvColors[ledCnt][3])
 {
 	for(int led = 0; led < ledCnt; led++)
 	{
 
-		leds[led].setHSV(hsvColors[led][0], hsvColors[led][1], hsvColors[led][2]);
-		/*char R = ((leds[led].r));
-		char G = ((leds[led].g));
-		char B = ((leds[led].b));
-		long RGB = R+G+B;
-		Serial.println(RGB);*/
-		//int h,s,v;
-		//RGB2HSV(RGB,h,s,v);
-/*		Serial.println(+R);
-		Serial.println(+G);
-		Serial.println(+B);*/
-		/*Serial.print(h);
-		Serial.print("+");
-		Serial.print(s);
-		Serial.print("+");
-		Serial.println(v);*/
+		ledStrip[led].setHSV(hsvColors[led][0], hsvColors[led][1], hsvColors[led][2]);
 	}
 	FastLED.show();
 }
@@ -428,11 +413,11 @@ void LedLogic::LedPlayFMRgDyn()
 	//LedMusic(ledColors, ledCnt);
 }
 
-void LedOut::LedOff()
+void CMExecutor::LedOff()
 {
 	for (char led = 0; led < ledCnt; led++)
 	{
-		leds[led].setColorCode(0x00);
+		ledStrip[led].setColorCode(0x00);
 	}
 	FastLED.show();
 }
@@ -501,7 +486,7 @@ void LedLogic::LedPlayAMLTH()
 		}
 	}
 	//Serial.println(FreqValsMax);
-	LedOut::LedMusic(ledColors);
+	CMExecutor::LedMusic(ledColors);
 }
 
 void  LedLogic::LedPlayAMFC()
@@ -609,7 +594,7 @@ void  LedLogic::LedPlayAMFC()
 		}
 	}
 	////Serial.println(FreqValsMax);
-	LedOut::LedMusic(ledColors);
+	CMExecutor::LedMusic(ledColors);
 }
 
 void LedLogic::LedPlayFMRandColor()
@@ -648,7 +633,7 @@ void LedLogic::LedPlayFMRandColor()
 	{
 		for (char led = 0; led < ledCnt; led++)
 		{
-			ledColors[led][0] = rgb2hsv_approximate(leds[led]).h;
+			ledColors[led][0] = rgb2hsv_approximate(ledStrip[led]).h;
 			//ledColors[led][2] = rgb2hsv_approximate(leds[led]).v;
 		}
 	}
@@ -756,4 +741,12 @@ void LedLogic::LedPlayFMRandColor()
 	Serial.println("****");
 	*/
 	//LedMusic(ledColors);
+}
+
+void CMExecutor::Init(uint8_t ledCount)
+{
+	FastLED.addLeds<NEOPIXEL, neoPin>(ledStrip, ledCount).setCorrection(0xFFB0F0);	//Добавляем светодиоды
+	FastLED.setTemperature(Tungsten100W);
+	FastLED.setBrightness(ledBrightness);
+	LedLogic::LedPlay(ledStrip);
 }

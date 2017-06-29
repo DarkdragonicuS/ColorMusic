@@ -18,6 +18,8 @@ bool flagModeL3SelectPrinted = false;
 bool flagModeL4SelectPrinted = false;
 bool flagModeL5SelectPrinted = false;*/
 
+float msg7OutMultiplier = 3; //коэффициент усиления вывода MSGEQ7
+
 void DebugMsg(String message)
 {
 	Serial.setTimeout(0);
@@ -28,8 +30,8 @@ void DebugMsg(String message)
 //Вывод конфигурации на сериал
 void ShowParams()
 {
-	Serial.print("Current config: ");
-	Serial.println(realParams);
+	btSerial.print("Current config: ");
+	btSerial.println(configParams);
 }
 
 /*//Запуск светомузыки
@@ -106,36 +108,22 @@ void LedPlayFMRotation(CRGB leds[ledCnt])
 //Получение значений амплитуд частот с MSGEQ7
 int* SpectrumAnalizer::GetFreqVals(int *FreqVals)
 {
-	int cnt = 0;
-	 digitalWrite(msg7RESET, HIGH);   // осуществляем сброс MSGEQ7
+	 digitalWrite(msg7RESET, HIGH);   //сброс MSGEQ7
 	    delay(5);
 	    digitalWrite(msg7RESET, LOW);
 
-	    for (int i = 0; i < 7; i++){             // семь частот - семь стробирующих импульсов
+	    for (int bound = 0; bound < 7; bound++){             // семь частот - семь STROBE-импульсов
 	        digitalWrite(msg7Strobe, LOW);
-	        delayMicroseconds(35);           // ждем установления значения 35 мкс
-	        int spectrumRead = analogRead(msg7DCout);      // считываем значение с аналогового входа
-			//Serial.print("Channel: ");
-			//Serial.println(i + 1);
-			//Serial.println(spectrumRead);
-	        int PWMvalue = map(spectrumRead, 0, 1023, 0, 255);  // преобразовываем диапазон 0-1024 к диапазону 0-255 для ШИМ
-			//Serial.println(PWMvalue);
-	        if (PWMvalue < 5)       // небольшой программный фильтр шума
-	            //PWMvalue = PWMvalue / 2;
-				PWMvalue = 0;
-
-	        //Serial.println(PWMvalue);
-	        FreqVals[i] = PWMvalue*3;
-			//Serial.println(FreqVals[i]);
-			/*if (FreqVals[i] > 150)
+	        delayMicroseconds(35);           //задержка для установления значения
+	        int amp = analogRead(msg7DCout);      //прием звукового сигнала
+	        int PWMvalue = map(amp, 0, 1023, 0, 255);  //преобразование диапазона полученных значений 0-1023 к диапазону 0-255 для ШИМ
+			if (PWMvalue < 5)       //программный фильтр шума
 			{
-				FreqVals[i] = 255;
-			}*/
-			
-	        //analogWrite(LEDpins[x], PWMvalue);
+				PWMvalue = 0;
+			}
+			FreqVals[bound] = PWMvalue*msg7OutMultiplier;
 	        digitalWrite(msg7Strobe, HIGH);
 	    }
-		//Serial.println("****");
 	return *FreqVals;
 }
 

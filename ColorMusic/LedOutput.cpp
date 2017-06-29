@@ -14,7 +14,7 @@ void LedOutput::LedFade(uint8_t ledHigh, uint8_t ledLow)
 	{
 		for (int led = 0; led < ledCnt; led++)
 		{
-			leds[led].setColorCode(0xFF0000);
+			ledStrip[led].setColorCode(0xFF0000);
 		}
 		firstLaunch = !firstLaunch;
 		StartTime = millis();
@@ -44,7 +44,7 @@ void LedOutput::LedFade(uint8_t ledHigh, uint8_t ledLow)
 			Serial.print(decV);
 			Serial.print('\t');
 			Serial.println(v);
-			leds[led].setHSV(GetHueFromCRGB(leds, led), GetSatFromCRGB(leds, led), v);
+			ledStrip[led].setHSV(GetHueFromCRGB(ledStrip, led), GetSatFromCRGB(ledStrip, led), v);
 		}
 		
 	}

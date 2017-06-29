@@ -33,11 +33,12 @@ private:
 	static void LedPlayFMRandColor();
 };
 
-class LedOut
+class CMExecutor
 {
 public:
 	static void LedMusic(int hsvColors[ledCnt][3]);	//Зажечь светодиоды указанными HSV-цветами
-	static void LedOff();
+	static void LedOff();	//Отключение светодиодов
+	static void Init(uint8_t ledCount);	//Инициализация светодиодной ленты
 };
 
 
