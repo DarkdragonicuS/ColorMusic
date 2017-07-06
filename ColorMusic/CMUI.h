@@ -32,7 +32,8 @@ private:
 	static void CommandStatus();	//Команда status
 	static unsigned int CMConfigure();		//Интерактивный конфигуратор
 	//static unsigned int Configure();
-	static unsigned int CMConfigure(unsigned int Params);	//установка указанной конфигурации
+	static unsigned int CMConfigure(uint8_t Params, uint32_t Color[7]);	//установка указанной конфигурации
+	static unsigned int CMConfigure(uint8_t Params);	
 	static void FastConfig(String strIn);	//команда config CONFIGCODE
 	static void RotateConfig();	//переключение режима
 

@@ -4,22 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <Button
-        android:text="Button"
+        android:text="Принять"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button1" />
-    <EditText
+    <TextView
+        android:text="Тон"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText1" />
+        android:id="@+id/textView1" />
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekBar1" />
+    <TextView
+        android:text="Насыщенность"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2" />
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekBar2" />
+    <TextView
+        android:text="Яркость"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3" />
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,10 +43,10 @@
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView1" />
+        android:id="@+id/ModeListView" />
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view1"
+        android:id="@+id/ColorExampleView"
         android:background="#ff000000" />
 </LinearLayout>

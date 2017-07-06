@@ -12,6 +12,7 @@
 //#include <MSGEQ7.h>
 #include "LedOutput.h"
 #include <SoftwareSerial.h>
+#include <stdio.h>
 
 //#define pinAnalogLeft A0
 //#define pinAnalogRight A0
@@ -27,13 +28,13 @@
 
 unsigned int configParamsTmp = 0x0;	//Настраиваемая конфигурация
 unsigned int configParams = 0x0;	//Используемая конфигурация работы
+unsigned int configColors[7] = { 0,0,0,0,0,0,0 };	//Используемые RGB-цвета
 bool configNeeded = true;
-SoftwareSerial btSerial = SoftwareSerial(btRX, btRX);	//установка выводов RX и TX для последовательного интерфейса
+SoftwareSerial btSerial = SoftwareSerial(btRX, btTX);	//установка выводов RX и TX для последовательного интерфейса
 CRGB *ledStrip = new CRGB[ledCnt];	//Создание объекта светодиодной ленты
 
 void setup() {
-	//Serial.begin(38400);
-	
+	Serial.begin(38400);
 	btSerial.begin(38400);	//Установка скорости обмена по последовательному интерфейсу
 	//Serial.setTimeout(0);
 	//strip.begin();
@@ -42,21 +43,21 @@ void setup() {
 	//FastLED.setBrightness(ledBrightness);
 	CMExecutor::Init(ledCnt);	//Инициализация работы NeoPixel
 	btSerial.setTimeout(50);
-	//analogReference(INTERNAL);
-	analogReference(DEFAULT);
+	analogReference(INTERNAL);
+	//analogReference(DEFAULT);
 	pinMode(neoPin, OUTPUT);		//Установка режима вывода на DIN-порт WS2812B
 	pinMode(msg7DCout, INPUT);	//Установка режима ввода с порта OUT MSGEQ7
-	pinMode(ModeButton, INPUT);	//Установка режима приема сигнала с кнопки Mode
+	pinMode(ModeButtonPin, INPUT);	//Установка режима приема сигнала с кнопки Mode
 	//LedLogic::LedPlay(leds);
-	/*for (char led = 0; led < ledCnt; led++)		//При включении выключаем свет (обнуляем память WS2812B)
-	{
-		leds[led].setColorCode(0xFFFFFF);
-	}
-	for (int led = 0; led < ledCnt; led++)
+	//for (char led = 0; led < ledCnt; led++)		//При включении выключаем свет (обнуляем память WS2812B)
+	//{
+	//	ledStrip[led].setColorCode(0xFFFFFF);
+	//}
+	/*for (int led = 0; led < ledCnt; led++)
 	{
 		leds[led].setHSV(0, 255, 255);
-	}
-	FastLED.show();*/
+	}*/
+	FastLED.show();
 	
 //	MSGEQ7.begin();
 	//DebugMsg("");
@@ -64,6 +65,7 @@ void setup() {
 }
 
 void loop() {
+
 	/*int data[7];
 	{
 		for (int i = 0; i < 7; )

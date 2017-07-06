@@ -95,10 +95,20 @@ void CMUI::CommandStatus()
 	btSerial.println();
 }
 
-unsigned int CMUI::CMConfigure(unsigned int Params)
+unsigned int CMUI::CMConfigure(uint8_t Params, uint32_t Color[7])
 {
 	configParamsTmp = Params;
+	for (int color = 0; color < 7; color++)
+	{
+		configColors[color] = Color[color];
+	}
 	return Params;
+}
+
+unsigned int CMUI::CMConfigure(uint8_t Params)
+{
+	uint32_t Colors[7] = { 0,0,0,0,0,0,0 };
+	return CMConfigure(Params, Colors);
 }
 
 //Интерактивный конфигуратор
@@ -521,9 +531,34 @@ None         =   0x0(0)
 
 void CMUI::FastConfig(String strIn)
 {
-	unsigned int par;
-	par = strIn.substring(strIn.indexOf(" ")+1).toInt();
-	CMConfigure(par);
+	int parCnt = 0;
+	uint8_t config = 0;
+	uint32_t color[7];
+	int shift = 0;
+	while (shift = strIn.indexOf(" ", shift+1) != -1)
+	{
+		parCnt++;
+		if (parCnt == 1)
+		{
+			if (strIn.indexOf(" ", shift + 1) != -1)
+			{
+				config = strIn.substring(strIn.indexOf(" ") + 1, strIn.indexOf(" ", shift + 1)).toInt();
+			}
+			else
+			{
+				config = strIn.substring(strIn.indexOf(" ") + 1).toInt();
+			}
+		}
+	}
+	if (parCnt == 1)
+	{
+		CMConfigure(config);
+	}
+	else
+	{
+		CMConfigure(config, color);
+	}
+	
 	
 }
 
@@ -545,7 +580,7 @@ void CMUI::FastConfig(String strIn)
 
 void CMUI::ModeButton()
 {
-	if (digitalRead(ModeButton) == LOW)
+	if (digitalRead(ModeButtonPin) == LOW)
 	{
 		UserButtonLastState = LOW;
 	}

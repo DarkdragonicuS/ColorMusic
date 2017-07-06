@@ -14,7 +14,7 @@
 void DebugMsg(String message);
 
 //ColorMusic:
-#define ModeButton 2
+#define ModeButtonPin 5
 
 //MSGEQ7:
 #define msg7RESET 11
@@ -23,7 +23,7 @@ void DebugMsg(String message);
 extern float msg7OutMultiplier;	//коэффициент усиления вывода MSGEQ7
 
 //WS2812B
-#define neoPin 6
+#define neoPin 4
 #define ledCnt 30
 #define ledBrightness 255
 
@@ -45,6 +45,7 @@ const long cColorViolet	 = 0xEE82EE;		//213h116s238v
 
 //extern long preParams[cParamCnt];	//Конфигурация параметров
 extern unsigned int configParams;
+extern unsigned int configColors[7];
 extern bool configNeeded;
 //extern bool flagParamsInited;
 //extern bool G_shellAvailable;

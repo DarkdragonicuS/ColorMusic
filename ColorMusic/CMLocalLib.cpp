@@ -18,7 +18,7 @@ bool flagModeL3SelectPrinted = false;
 bool flagModeL4SelectPrinted = false;
 bool flagModeL5SelectPrinted = false;*/
 
-float msg7OutMultiplier = 3; //коэффициент усиления вывода MSGEQ7
+float msg7OutMultiplier = 4; //коэффициент усиления вывода MSGEQ7
 
 void DebugMsg(String message)
 {

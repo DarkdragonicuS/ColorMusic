@@ -31,6 +31,10 @@ private:
 	static void LedPlayAMFC();			//From Center RGB
 	static void LedPlayFMRgColor(unsigned int RGBColor);	//FM Range Single Color
 	static void LedPlayFMRandColor();
+	static void LedLogic::ParseParam(unsigned int paramCode);
+	static void LedLogic::LedPlayAMLTH(unsigned int Color);
+	static void  LedLogic::LedPlayAMFC(unsigned int Color);
+
 };
 
 class CMExecutor

@@ -103,7 +103,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties debug.view.FreeMemory="" debug.view.AnalogPins="" arduino.upload.port="COM3" debug.view.DigitalPins="" VM.DebugVariablesWindow.ColumnVisibleBreakPointName="0" VM.DebugVariablesWindow.ColumnVisibleFunctionName="0" />
+      <UserProperties debug.view.FreeMemory="" debug.view.AnalogPins="" arduino.upload.port="COM9" debug.view.DigitalPins="" VM.DebugVariablesWindow.ColumnVisibleBreakPointName="0" VM.DebugVariablesWindow.ColumnVisibleFunctionName="0" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
